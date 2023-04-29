@@ -1,0 +1,23 @@
+<div class="container mt-3 col-md-6 offset-md-3">
+    <form [formGroup]="productFormGrop" (ngSubmit)="handleAddProduct()">
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input [class.border-success]="(productFormGrop.controls['name'].touched)" type="text" formControlName="name" class="form-control">
+            <small  *ngIf="productFormGrop.controls['name'].errors && productFormGrop.controls['name'].touched" class="text-danger">
+                {{getErrorMessage('Name', productFormGrop.controls['name'].errors)}}
+            </small>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Price</label>
+            <input type="text" formControlName="price" class="form-control">
+            <small *ngIf="productFormGrop.controls['price'].errors && productFormGrop.controls['price'].touched" class="text-danger">
+                {{getErrorMessage('Prce', productFormGrop.controls['price'].errors)}}
+            </small>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Promotion</label>
+            <input type="checkbox" formControlName="promotion" class="form-check">
+        </div>
+        <button [disabled]="!this.productFormGrop.valid" type="submit" class="btn btn-info">Save</button>
+    </form>
+</div>

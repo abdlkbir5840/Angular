@@ -1,0 +1,58 @@
+<div class="container my-3">
+  <nav *ngIf="authenticationService.hasRole('ADMIN')" class="p-2 m-2 border border-info">
+   <button class="btn btn-outline-info" (click)="handleNewProduct()">New Product</button>
+  </nav>
+  <ng-template #errors>
+    <div class="text-danger">
+      {{errorMessage}}
+    </div>
+  </ng-template>
+
+  <div *ngIf="products;else errors" class="card">
+    <div class="card-header">Products List</div>
+    <div class="card-body">
+      <form [formGroup]="searchFormGroup">
+        <div class="input-group">
+          <label for="keyword" class="input-group-text">Keyword:</label>
+          <input (input)="handleSearchProducts()" type="text" class="form-control" formControlName="keyword">
+          <button class="btn btn-info">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Promotion</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td>{{product.id}}</td>
+            <td>{{product.name}}</td>
+            <td>{{product.price}}</td>
+            <td><i *ngIf="product.promotion" class="bi bi-heart-fill text-success"></i></td>
+            <td *ngIf="authenticationService.hasRole('ADMIN')"> <button (click)="handleSetPromotion(product)" [ngClass]="product.promotion?'btn-danger':'btn-success'" class="btn">
+              <span *ngIf="product.promotion">Promo Off</span>
+              <span *ngIf="!product.promotion"> Promo On</span>
+            </button></td>
+            <td *ngIf="authenticationService.hasRole('ADMIN')" class="d-flex justify-content space-between">
+              <button (click)="handleDeleteProduct(product)" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+              <button (click)="handleEditeProduct(product)" class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ul class="nav nav-pills">
+        <li *ngFor="let item of [].constructor(this.totalePage); let i = index">
+          <a (click)="goToPage(i)" [ngClass]="i==currentPage?'bg-info':'btn-outline-info'" class="btn  ms-1 mt-1">{{i}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
